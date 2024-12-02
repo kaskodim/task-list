@@ -11,7 +11,6 @@ const tasksBek = [
     {id: v1(), title: 'Прочитать конеспект', completed: false}
 ];
 
-
 function App() {
 
     const [tasks, setTasks] = useState<Array<TaskType>>(tasksBek)

@@ -21,7 +21,7 @@ export const TaskList = (props: TaskListPropsType) => {
 
             <div className={'inputSave'}>
                 <input/>
-                <Button name={'сохранить'}/>
+                <Button name={'добавить'}/>
             </div>
 
             <div>
@@ -44,7 +44,9 @@ export const TaskList = (props: TaskListPropsType) => {
                             }}>
                             <input type="checkbox"
                                    checked={t.completed}/>
-                            {t.title}
+                            <span className={t.completed ? 'completed' : ''}>
+                                      {t.title}
+                           </span>
                         </li>
                     )
                 })}
