@@ -1,11 +1,15 @@
 import React from 'react';
+import {ButtonNameType} from '../App';
+
 
 type ButtonPropsType = {
-    name: string;
+    name: ButtonNameType;
+    onClick?: () => void;
 }
 
 export const Button = (props: ButtonPropsType) => {
     return (
-        <button>{props.name}</button>
+        <button onClick={props.onClick}
+        >{props.name}</button>
     );
 };

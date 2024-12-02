@@ -20,6 +20,7 @@ code {
     border: 3px solid black;
     border-radius: 5px;
     user-select: none;
+    background: antiquewhite;
 }
 
 .inputSave {
@@ -27,15 +28,58 @@ code {
     justify-content: space-between;
 }
 
+.inputValue {
+    flex-grow: 1;
+    margin-right: 10px;
+}
+
+.filter-buttons {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+}
+
 .checkBox {
     list-style-type: none;
     text-align: left;
     padding: 0;
     cursor: default;
+}
 
+.task {
+    margin-top: 5px;
+    padding: 6px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+    display: flex;
+    justify-content: space-between;
+}
+
+.task:hover {
+    background-color: #b8c3f1;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1)
+}
+
+.task:hover .buttonTask{
+    opacity: 100%;
+}
+
+.buttonTask{
+   opacity: 0;
+    transition: opacity 0.1s ease;
 }
 
 .completed {
     text-decoration: line-through;
     opacity: 70%;
+}
+
+.error {
+    border: 2px solid red;
+}
+
+.errorMessage {
+    color: red;
 }
