@@ -1,6 +1,6 @@
 import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
 import {Button} from './Button';
-import classNames from 'classnames';
+import {FilterValue} from '../App';
 
 
 export type TaskType = {
@@ -14,6 +14,7 @@ type TaskListPropsType = {
     tasks: Array<TaskType>
     changeCheckbox: (id: string, completed: boolean) => void
     addTask: (title: string) => void
+    changeFilter: (value: FilterValue) => void
 }
 
 export const TaskList = (props: TaskListPropsType) => {
@@ -37,14 +38,13 @@ export const TaskList = (props: TaskListPropsType) => {
             setNewTitle('')
             return
         } else {
-            // добавить обрезание строки, если не влазивает!
+            // TODO добавить обрезание строки, если не влазивает!
             props.addTask(newTitle.trim())
             setNewTitle('')
             setError('')
         }
     }
     const onPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-
         if (e.ctrlKey && e.key === 'Enter') {
             addTitleHandler()
         }
@@ -55,20 +55,30 @@ export const TaskList = (props: TaskListPropsType) => {
             <h3>{props.title}</h3>
 
             <div className={'inputSave'}>
-                <input className={classNames(error ? 'error' : '', 'inputValue')}
+                <input className={`inputValue ${error ? 'error' : ''}`}
                        onChange={newTitleHandler}
                        value={newTitle}
                        placeholder={error ? error : ''}
                        onKeyUp={onPressHandler}/>
 
                 <Button name={'добавить'}
-                        onClick={addTitleHandler}/>
+                        onClick={addTitleHandler}
+                    // TODO скидывать фильтр на все или не выполненные
+
+                />
             </div>
 
             <div className={'filter-buttons'}>
-                <Button name={'все'}/>
-                <Button name={'выполнено'}/>
-                <Button name={'не выполнено'}/>
+                <Button name={'все'} onClick={() => {
+                    props.changeFilter('all')
+                }}/>
+                <Button name={'выполнено'} onClick={() => {
+                    props.changeFilter('completed')
+                }}/>
+                <Button name={'не выполнено'} onClick={() => {
+                    props.changeFilter('active')
+                }}/>
+                {/*    добавить кнопку удалить выполненные */}
             </div>
 
             <ul className={'checkBox'}>
@@ -80,15 +90,16 @@ export const TaskList = (props: TaskListPropsType) => {
 
                     return (
                         <li className={'task'}
-                            key={t.id}
-                            onClick={() => {
-                                onclickCheckedHandler(t.id)
-                            }}>
-                            <div>
-                                <input type="checkbox"
-                                       checked={t.completed}/>
+                            key={t.id}>
+                            <label htmlFor={t.id}>
+                                <input id={t.id} type="checkbox"
+                                       checked={t.completed}
+                                       onChange={() => {
+                                           onclickCheckedHandler(t.id)
+                                       }}
+                                />
                                 <span className={t.completed ? 'completed' : ''}>{t.title}</span>
-                            </div>
+                            </label>
                             <button className={'buttonTask'}>x</button>
 
                         </li>

@@ -11,12 +11,13 @@ const tasksBek = [
     {id: v1(), title: 'Прочитать конспект', completed: false}
 ];
 
-export type ButtonNameType = 'добавить' | 'все' | 'выполнено' | 'не выполнено'
 
+export type FilterValue = 'all' | 'completed' | 'active'
 
 function App() {
 
     const [tasks, setTasks] = useState<Array<TaskType>>(tasksBek)
+    const [filteredTask, setFilteredTask] = useState<Array<TaskType>>(tasks)
 
     function changeCheckbox(id: string, completed: boolean) {
 
@@ -26,13 +27,13 @@ function App() {
             setTasks([...tasks]);
         }
 
-
         // setTasks(prevTasks =>
         //     prevTasks.map(task =>
-        //         task.id === id ? { ...task, completed: !completed } : task
+        //         task.id === id ? {  ...task, completed: !completed, } : task
         //     )
         // );
     }
+
     function addTask(title: string) {
         let newTask = {
             id: v1(),
@@ -42,13 +43,27 @@ function App() {
         setTasks([newTask, ...tasks])
     }
 
+    function changeFilter(value: FilterValue) {
+        switch (value) {
+            case 'completed':
+                setFilteredTask(tasks.filter(t => t.completed))
+                break
+            case 'active':
+                setFilteredTask(tasks.filter(t => !t.completed))
+                break
+            default:
+                setFilteredTask(tasks)
+        }
+    }
+
     return (
         <div className="App">
             <h6>статус: -пока можно только жмякать CheckBox и добавлять задачки :) </h6>
             <TaskList title={'Мой список дел:'}
-                      tasks={tasks}
+                      tasks={filteredTask}
                       changeCheckbox={changeCheckbox}
-                      addTask={addTask}/>
+                      addTask={addTask}
+                      changeFilter={changeFilter}/>
         </div>
     );
 }

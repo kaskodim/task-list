@@ -1,9 +1,7 @@
 import React from 'react';
-import {ButtonNameType} from '../App';
-
 
 type ButtonPropsType = {
-    name: ButtonNameType;
+    name: string;
     onClick?: () => void;
 }
 
