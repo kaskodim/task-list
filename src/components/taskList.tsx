@@ -8,13 +8,16 @@ export type TaskType = {
     title: string
     completed: boolean
 }
-
 type TaskListPropsType = {
     title: string
     tasks: Array<TaskType>
+    tasksState: Array<TaskType>
     changeCheckbox: (id: string, completed: boolean) => void
     addTask: (title: string) => void
     changeFilter: (value: FilterValue) => void
+    deleteCompletedTasks: () => void
+    deleteTask: (id: string) => void
+    filter: FilterValue
 }
 
 export const TaskList = (props: TaskListPropsType) => {
@@ -33,16 +36,18 @@ export const TaskList = (props: TaskListPropsType) => {
             return
         }
 
-        if (props.tasks.some(t => t.title === newTitle)) {
+        if (props.tasksState.some(t => t.title === newTitle)) {
             setError(' повторяешься :)')
             setNewTitle('')
             return
         } else {
             // TODO добавить обрезание строки, если не влазивает!
             props.addTask(newTitle.trim())
+            props.changeFilter('all')
             setNewTitle('')
             setError('')
         }
+
     }
     const onPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
         if (e.ctrlKey && e.key === 'Enter') {
@@ -63,49 +68,65 @@ export const TaskList = (props: TaskListPropsType) => {
 
                 <Button name={'добавить'}
                         onClick={addTitleHandler}
+
                     // TODO скидывать фильтр на все или не выполненные
 
                 />
             </div>
 
             <div className={'filter-buttons'}>
-                <Button name={'все'} onClick={() => {
-                    props.changeFilter('all')
-                }}/>
-                <Button name={'выполнено'} onClick={() => {
+                <Button className={props.filter === 'all' ? 'buttonActive' : ''}
+                        name={'все'}
+                        onClick={() => {
+                            props.changeFilter('all')
+                        }}/>
+                <Button className={props.filter === 'completed' ? 'buttonActive' : ''}
+                        name={'выполнено'} onClick={() => {
                     props.changeFilter('completed')
                 }}/>
-                <Button name={'не выполнено'} onClick={() => {
+                <Button className={props.filter === 'active' ? 'buttonActive' : ''}
+                        name={'не выполнено'} onClick={() => {
                     props.changeFilter('active')
                 }}/>
-                {/*    добавить кнопку удалить выполненные */}
+
+
             </div>
 
             <ul className={'checkBox'}>
-                {props.tasks.map((t) => {
+                {
+                    props.tasks.length === 0 ? (
+                        <p>дела не добавлены</p>
+                    ) : (
 
-                    const onclickCheckedHandler = (id: string) => {
-                        props.changeCheckbox(id, t.completed);
-                    }
+                        props.tasks.map((t) => {
+                            const onclickCheckedHandler = (id: string) => {
+                                props.changeCheckbox(id, t.completed);
+                            }
 
-                    return (
-                        <li className={'task'}
-                            key={t.id}>
-                            <label htmlFor={t.id}>
-                                <input id={t.id} type="checkbox"
-                                       checked={t.completed}
-                                       onChange={() => {
-                                           onclickCheckedHandler(t.id)
-                                       }}
-                                />
-                                <span className={t.completed ? 'completed' : ''}>{t.title}</span>
-                            </label>
-                            <button className={'buttonTask'}>x</button>
-
-                        </li>
+                            return (
+                                <li className={'task'}
+                                    key={t.id}>
+                                    <label htmlFor={t.id}>
+                                        <input id={t.id} type="checkbox"
+                                               checked={t.completed}
+                                               onChange={() => {
+                                                   onclickCheckedHandler(t.id)
+                                               }}
+                                        />
+                                        <span className={t.completed ? 'completed' : ''}>{t.title}</span>
+                                    </label>
+                                    <button className={'buttonTask'}
+                                            onClick={() => {
+                                                props.deleteTask(t.id)
+                                            }}>x
+                                    </button>
+                                </li>
+                            )
+                        })
                     )
-                })}
+                }
             </ul>
+            <Button name={'удалить выполненные'} onClick={props.deleteCompletedTasks}/>
         </div>
     );
 };
