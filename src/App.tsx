@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {TaskList, TaskType} from './components/taskList';
 import {v1} from 'uuid';
+import {ModalDeleteTask} from './components/modalDeleteTask/ModalDeleteTask';
 
 
 const tasksBack: TaskType[] = [
@@ -18,6 +19,10 @@ function App() {
 
     const [tasks, setTasks] = useState<Array<TaskType>>(tasksBack)
     const [filter, setFilter] = useState<FilterValue>('all')
+    const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
+    const [idTaskToDelete, setIdTaskToDelete] = useState<string | null>(null)
+
+    console.log(idTaskToDelete)
 
     function changeCheckbox(id: string, completed: boolean) {
 
@@ -55,7 +60,19 @@ function App() {
     }
 
     function deleteTask(id: string) {
-        setTasks(tasks.filter(task => task.id !== id))
+        setIsModalOpen(true)
+        setIdTaskToDelete(id)
+    }
+
+    function closeModal() {
+        setIsModalOpen(false)
+        setIdTaskToDelete(null)
+    }
+
+    function confirmDelete() {
+        setTasks(tasks.filter(task => task.id !== idTaskToDelete))
+        setIdTaskToDelete(null)
+        setIsModalOpen(false)
     }
 
     const filteredTasks = tasks.filter(task => {
@@ -77,6 +94,11 @@ function App() {
                       deleteCompletedTasks={deleteCompletedTasks}
                       deleteTask={deleteTask}
                       filter={filter}/>
+
+            <ModalDeleteTask isOpen={isModalOpen}
+                             closeModal={closeModal}
+                             confirmDelete={confirmDelete}
+            />
         </div>
     );
 }

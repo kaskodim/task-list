@@ -48,7 +48,7 @@ code {
     cursor: default;
 }
 
-.checkBox>p{
+.checkBox > p {
     text-align: center;
 }
 
@@ -99,4 +99,27 @@ code {
 
 .buttonActive {
     background-color: rgba(69, 200, 227, 0.71);
+}
+
+@media (max-width: 480px) {
+    .App {
+        padding: 10px;
+    }
+
+    .inputSave {
+        flex-direction: column;
+    }
+
+    .inputValue {
+        height: 25px;
+        margin-bottom: 3px;
+    }
+
+    .filter-buttons {
+        flex-direction: column;
+    }
+
+    .task {
+        padding: 3px;
+    }
 }

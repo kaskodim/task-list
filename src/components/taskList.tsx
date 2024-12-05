@@ -68,9 +68,6 @@ export const TaskList = (props: TaskListPropsType) => {
 
                 <Button name={'добавить'}
                         onClick={addTitleHandler}
-
-                    // TODO скидывать фильтр на все или не выполненные
-
                 />
             </div>
 
@@ -95,7 +92,7 @@ export const TaskList = (props: TaskListPropsType) => {
             <ul className={'checkBox'}>
                 {
                     props.tasks.length === 0 ? (
-                        <p>дела не добавлены</p>
+                        <p>дела не добавлены или выполнены</p>
                     ) : (
 
                         props.tasks.map((t) => {
@@ -116,9 +113,7 @@ export const TaskList = (props: TaskListPropsType) => {
                                         <span className={t.completed ? 'completed' : ''}>{t.title}</span>
                                     </label>
                                     <button className={'buttonTask'}
-                                            onClick={() => {
-                                                props.deleteTask(t.id)
-                                            }}>x
+                                            onClick={() => props.deleteTask(t.id)}>x
                                     </button>
                                 </li>
                             )
@@ -126,7 +121,11 @@ export const TaskList = (props: TaskListPropsType) => {
                     )
                 }
             </ul>
-            <Button name={'удалить выполненные'} onClick={props.deleteCompletedTasks}/>
+
+            {props.filter === 'all' || props.filter === 'completed' ? (
+                <Button name={'удалить выполненные'} onClick={props.deleteCompletedTasks}/>
+
+            ) : ''}
         </div>
     );
 };
