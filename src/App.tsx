@@ -84,7 +84,6 @@ function App() {
 
     return (
         <div className="App">
-            <h6>статус: можно жмякать CheckBox и добавлять и удалять задачки :) </h6>
             <TaskList title={'Мой список дел:'}
                       tasks={filteredTasks}
                       tasksState={tasks}

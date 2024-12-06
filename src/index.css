@@ -98,7 +98,9 @@ code {
 }
 
 .buttonActive {
-    background-color: rgba(69, 200, 227, 0.71);
+    background-color: #b8c3f1;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border: none;
 }
 
 @media (max-width: 480px) {
