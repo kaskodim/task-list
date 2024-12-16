@@ -3,20 +3,21 @@ import {Button} from './Button';
 import {FilterValue} from '../App';
 
 
-export type TaskType = {
+type TaskType = {
     id: string
     title: string
     completed: boolean
 }
 type TaskListPropsType = {
+    tasksListId: string
     title: string
     tasks: Array<TaskType>
-    tasksState: Array<TaskType>
-    changeCheckbox: (id: string, completed: boolean) => void
-    addTask: (title: string) => void
-    changeFilter: (value: FilterValue) => void
-    deleteCompletedTasks: () => void
-    deleteTask: (id: string) => void
+    tasksState: { [tasksListId: string]: Array<TaskType> }
+    changeCheckbox: (tasksListId: string, id: string, completed: boolean) => void
+    addTask: (tasksListId: string, title: string) => void
+    changeFilter: (value: FilterValue, id: string) => void
+    deleteCompletedTasks: (tasksListId: string) => void
+    deleteTask: (id: string, tasksListId: string) => void
     filter: FilterValue
 }
 
@@ -36,14 +37,14 @@ export const TaskList = (props: TaskListPropsType) => {
             return
         }
 
-        if (props.tasksState.some(t => t.title === newTitle)) {
+        if (props.tasksState[props.tasksListId].some(t => t.title === newTitle)) {
             setError(' повторяешься :)')
             setNewTitle('')
             return
         } else {
             // TODO добавить обрезание строки, если не влазивает!
-            props.addTask(newTitle.trim())
-            props.changeFilter('all')
+            props.addTask(props.tasksListId, newTitle.trim())
+            props.changeFilter('all', props.tasksListId)
             setNewTitle('')
             setError('')
         }
@@ -75,15 +76,15 @@ export const TaskList = (props: TaskListPropsType) => {
                 <Button className={props.filter === 'all' ? 'buttonActive' : ''}
                         name={'все'}
                         onClick={() => {
-                            props.changeFilter('all')
+                            props.changeFilter('all', props.tasksListId)
                         }}/>
                 <Button className={props.filter === 'completed' ? 'buttonActive' : ''}
                         name={'выполнено'} onClick={() => {
-                    props.changeFilter('completed')
+                    props.changeFilter('completed', props.tasksListId)
                 }}/>
                 <Button className={props.filter === 'active' ? 'buttonActive' : ''}
                         name={'не выполнено'} onClick={() => {
-                    props.changeFilter('active')
+                    props.changeFilter('active', props.tasksListId)
                 }}/>
 
 
@@ -97,7 +98,7 @@ export const TaskList = (props: TaskListPropsType) => {
 
                         props.tasks.map((t) => {
                             const onclickCheckedHandler = (id: string) => {
-                                props.changeCheckbox(id, t.completed);
+                                props.changeCheckbox(props.tasksListId, id, t.completed);
                             }
 
                             return (
@@ -113,7 +114,7 @@ export const TaskList = (props: TaskListPropsType) => {
                                         <span className={t.completed ? 'completed' : ''}>{t.title}</span>
                                     </label>
                                     <button className={'buttonTask'}
-                                            onClick={() => props.deleteTask(t.id)}>x
+                                            onClick={() => props.deleteTask(t.id, props.tasksListId)}>x
                                     </button>
                                 </li>
                             )
@@ -123,7 +124,9 @@ export const TaskList = (props: TaskListPropsType) => {
             </ul>
 
             {props.filter === 'all' || props.filter === 'completed' ? (
-                <Button name={'удалить выполненные'} onClick={props.deleteCompletedTasks}/>
+                <Button name={'удалить выполненные'} onClick={() => {
+                    props.deleteCompletedTasks(props.tasksListId)
+                }}/>
 
             ) : ''}
         </div>
