@@ -12,16 +12,35 @@ code {
     monospace;
 }
 
+.taskLists{
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: flex-start;
+    width: 100%;
+}
+
 .taskList {
     text-align: center;
+    margin: 30px;
     width: 400px;
-    margin: 50px auto;
     padding: 30px;
     border: 3px solid black;
     border-radius: 5px;
     user-select: none;
     background: antiquewhite;
+    position: relative;
+
 }
+
+.buttonDeleteTaskList {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    width: 26px;
+    height: 26px;
+}
+
 
 .inputSave {
     display: flex;

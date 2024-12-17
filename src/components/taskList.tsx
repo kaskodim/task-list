@@ -19,6 +19,7 @@ type TaskListPropsType = {
     deleteCompletedTasks: (tasksListId: string) => void
     deleteTask: (id: string, tasksListId: string) => void
     filter: FilterValue
+    deleteTaskList: (tasksListId: string) => void
 }
 
 export const TaskList = (props: TaskListPropsType) => {
@@ -56,9 +57,19 @@ export const TaskList = (props: TaskListPropsType) => {
         }
     }
 
+    const deleteTaskList = () => {
+        props.deleteTaskList(props.tasksListId)
+
+    }
+
     return (
         <div>
-            <h3>{props.title}</h3>
+            <Button name={'x'} onClick={deleteTaskList} className={'buttonDeleteTaskList'}/>
+
+            <div className={'taskListHeader'}>
+                <h3>{props.title}</h3>
+            </div>
+
 
             <div className={'inputSave'}>
                 <input className={`inputValue ${error ? 'error' : ''}`}
@@ -86,8 +97,6 @@ export const TaskList = (props: TaskListPropsType) => {
                         name={'не выполнено'} onClick={() => {
                     props.changeFilter('active', props.tasksListId)
                 }}/>
-
-
             </div>
 
             <ul className={'checkBox'}>

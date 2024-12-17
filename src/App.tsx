@@ -114,10 +114,17 @@ function App() {
         }
     }
 
+    function deleteTaskList(tasksListId: string) {
+        const filteredTasksList = taskLists.filter(t => t.id !== tasksListId)
+        setTaskLists(filteredTasksList)
+
+        delete tasks[tasksListId]
+        setTasks({...tasks})
+    }
 
     return (
 
-        <div>
+        <div className={'taskLists'}>
 
             {
                 taskLists.map(tl => {
@@ -127,7 +134,6 @@ function App() {
                         // if (filter === 'all') return true
                         return true
                     });
-
 
                     return (
                         <div className="taskList">
@@ -142,7 +148,8 @@ function App() {
                                 changeFilter={changeFilter}
                                 deleteCompletedTasks={deleteCompletedTasks}
                                 deleteTask={deleteTask}
-                                filter={tl.filter}/>
+                                filter={tl.filter}
+                                deleteTaskList={deleteTaskList}/>
 
                             <ModalDeleteTask isOpen={isModalOpen}
                                              closeModal={closeModal}
