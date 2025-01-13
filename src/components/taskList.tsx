@@ -33,7 +33,7 @@ export const TaskList = (props: TaskListPropsType) => {
     const addTitleHandler = () => {
 
         if (!newTitle) {
-            setError(' напиши что-нибудь...')
+            setError('  напиши что-нибудь...')
             setNewTitle('')
             return
         }
